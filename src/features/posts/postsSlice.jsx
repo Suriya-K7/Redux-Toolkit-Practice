@@ -79,6 +79,48 @@ export const fetchPosts = createAsyncThunk("posts/fetchposts", async () => {
   return response.data;
 });
 
+export const addNewPost = createAsyncThunk(
+  "posts/addNewPosts",
+  async (initialPost) => {
+    const response = await axios.post(POSTS_URL, initialPost);
+    return response.data;
+  }
+);
+
+export const updatePost = createAsyncThunk(
+  "posts/updatePost",
+  async (initialPost) => {
+    const { id } = initialPost;
+
+    try {
+      const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+      //because of fake json code we are returning newly edited post
+      return initialPost;
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (initialPost) => {
+    const { id } = initialPost;
+
+    try {
+      const response = await axios.delete(`${POSTS_URL}/${id}`, initialPost);
+
+      if (response?.status === 200) return initialPost;
+
+      return `${response?.status}:${response?.statusText}`;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+);
+
 const initialState = {
   posts: [],
   status: "idle", // idle, loading, succeeded, failed
@@ -146,6 +188,44 @@ const postsSlice = createSlice({
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(addNewPost.fulfilled, (state, action) => {
+        action.payload.id = Date.now();
+        action.payload.userId = Number(action.payload.userId);
+        action.payload.date = new Date().toISOString();
+        action.payload.reactions = {
+          thumbsUp: 0,
+          wow: 0,
+          heart: 0,
+          rocket: 0,
+          coffee: 0,
+        };
+        state.posts.push(action.payload);
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Update could not complete");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload;
+        action.payload.date = new Date().toISOString();
+
+        const posts = state.posts.filter((post) => post.id !== id);
+
+        state.posts = [...posts, action.payload];
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Delete could not complete");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload;
+
+        const posts = state.posts.filter((post) => post.id !== id);
+
+        state.posts = posts;
       });
   },
 });
@@ -155,6 +235,9 @@ export const selectedPosts = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 
 export const getPostsError = (state) => state.posts.error;
+
+export const selectPostById = (state, postId) =>
+  state.posts.posts.find((post) => post.id === postId);
 
 export const { postAdded, reactionAdded } = postsSlice.actions;
 

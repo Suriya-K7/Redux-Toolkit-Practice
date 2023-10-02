@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -23,7 +23,6 @@ const NavBar = () => {
               <NavLink
                 to={"/counter"}
                 className='nav-link'
-                href='javascript:void(0)'
               >
                 Counter
               </NavLink>
@@ -32,9 +31,16 @@ const NavBar = () => {
               <NavLink
                 to={"/post"}
                 className='nav-link'
-                href='javascript:void(0)'
               >
                 Posts
+              </NavLink>
+            </li>
+            <li className='nav-item'>
+              <NavLink
+                to={"/post/add"}
+                className='nav-link'
+              >
+                Add Posts
               </NavLink>
             </li>
           </ul>
