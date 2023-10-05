@@ -7,6 +7,8 @@ import { Routes, Route } from "react-router-dom";
 import AddPostsForm from "./components/AddPostForm";
 import SinglePostPage from "./components/SinglePostPage";
 import EditPosts from "./components/EditPosts";
+import UsersList from "./pages/UsersList";
+import SingleUserPage from "./components/SingleUserPage";
 
 const App = () => {
   return (
@@ -33,6 +35,16 @@ const App = () => {
           <Route
             path='edit/:id'
             element={<EditPosts />}
+          />
+        </Route>
+        <Route path='/user'>
+          <Route
+            index
+            element={<UsersList />}
+          />
+          <Route
+            path=':id'
+            element={<SingleUserPage />}
           />
         </Route>
       </Routes>

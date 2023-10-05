@@ -43,6 +43,14 @@ const NavBar = () => {
                 Add Posts
               </NavLink>
             </li>
+            <li className='nav-item'>
+              <NavLink
+                to={"/user"}
+                className='nav-link'
+              >
+                Users
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

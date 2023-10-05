@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import {
   selectedPosts,
   getPostsError,
-  fetchPosts,
   getPostsStatus,
 } from "../features/posts/postsSlice";
-import AddPostForm from "../components/AddPostForm";
 import PostsExcerpts from "../components/PostsExcerpts";
 
 const PostsList = () => {
@@ -16,13 +14,15 @@ const PostsList = () => {
 
   const postError = useSelector(getPostsError);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (postStatus === "idle") {
-      dispatch(fetchPosts());
-    }
-  }, [postStatus, dispatch]);
+  // const count = useSelector(getCount);
+
+  // useEffect(() => {
+  //   if (postStatus === "idle") {
+  //     dispatch(fetchPosts());
+  //   }
+  // }, [postStatus, dispatch]);
 
   const anotherFormatPost = posts
     .slice()
@@ -45,7 +45,17 @@ const PostsList = () => {
     content = <p>{postError}</p>;
   }
 
-  return <section>{content}</section>;
+  return (
+    <section>
+      {/* <button
+        onClick={() => dispatch(increaseCount())}
+        className='btn text-white btn-secondary'
+      >
+        {count}
+      </button> */}
+      {content}
+    </section>
+  );
 };
 
 export default PostsList;

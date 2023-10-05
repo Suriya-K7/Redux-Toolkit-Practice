@@ -22,4 +22,6 @@ const PostsExcerpts = ({ post }) => {
   );
 };
 
+// PostsExcerpts = React.memo(PostsExcerpts);
+
 export default PostsExcerpts;
